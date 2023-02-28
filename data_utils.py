@@ -20,7 +20,7 @@ def rand_train_test_idx(label, train_prop=.5, valid_prop=.25, ignore_negative=Tr
     train_num = int(n * train_prop)
     valid_num = int(n * valid_prop)
 
-    perm = torch.as_tensor(np.random.permutation(n))
+    perm = torch.as_tensor(np.random.permutation(n), dtype=torch.long)
 
     train_indices = perm[:train_num]
     val_indices = perm[train_num:train_num + valid_num]

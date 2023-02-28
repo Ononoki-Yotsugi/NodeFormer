@@ -113,9 +113,7 @@ We also provide an easy access to common datasets including what we used in the 
 
 ```shell
 # node classification on small datasets
-python main.py --dataset cora --rand_split --metric acc --method nodeformer --lr 0.001 \
---weight_decay 5e-3 --num_layers 2 --hidden_channels 32 --num_heads 4 --rb_order 2 --rb_trans sigmoid \
---lamda 1.0 --M 30 --K 10 --use_bn --use_residual --use_gumbel --runs 5 --epochs 1000 --device 0
+python main.py --dataset cora --rand_split --metric acc --method nodeformer --lr 0.001 --weight_decay 5e-3 --num_layers 2 --hidden_channels 32 --num_heads 4 --rb_order 2 --rb_trans sigmoid --lamda 1.0 --M 30 --K 10 --use_bn --use_residual --use_gumbel --runs 5 --epochs 1000 --device 0
 
 # node classification on large datasets
 python main-batch.py --dataset ogbn-proteins --metric rocauc --method nodeformer --lr 1e-2 \

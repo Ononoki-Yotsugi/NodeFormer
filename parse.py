@@ -58,7 +58,7 @@ def parse_method(args, dataset, n, c, d, device):
                         num_layers=args.num_layers, dropout=args.dropout,
                         num_mlp_layers=args.num_mlp_layers).to(device)
     elif args.method == 'nodeformer':
-        model=NodeFormer(d, args.hidden_channels, c, num_layers=args.num_layers, dropout=args.dropout,
+        model = NodeFormer(d, args.hidden_channels, c, num_layers=args.num_layers, dropout=args.dropout,
                     num_heads=args.num_heads, use_bn=args.use_bn, nb_random_features=args.M,
                     use_gumbel=args.use_gumbel, use_residual=args.use_residual, use_act=args.use_act, use_jk=args.use_jk,
                     nb_gumbel_sample=args.K, rb_order=args.rb_order, rb_trans=args.rb_trans).to(device)
@@ -72,7 +72,7 @@ def parser_add_main_args(parser):
     parser.add_argument('--method', '-m', type=str, default='nodeformer')
     parser.add_argument('--dataset', type=str, default='cora')
     parser.add_argument('--sub_dataset', type=str, default='')
-    parser.add_argument('--data_dir', type=str, default='../data/')
+    parser.add_argument('--data_dir', type=str, default='./data/')
     parser.add_argument('--device', type=int, default=0,
                         help='which gpu to use if any (default: 0)')
     parser.add_argument('--seed', type=int, default=42)
