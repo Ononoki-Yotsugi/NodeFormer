@@ -9,6 +9,7 @@ from torch_geometric.utils import degree
 BIG_CONSTANT = 1e8
 
 def create_projection_matrix(m, d, seed=0, scaling=0, struct_mode=False):
+    # 产生RF的随机变换矩阵
     nb_full_blocks = int(m/d)
     block_list = []
     current_seed = seed
@@ -37,7 +38,7 @@ def create_projection_matrix(m, d, seed=0, scaling=0, struct_mode=False):
     current_seed += 1
     torch.manual_seed(current_seed)
     if scaling == 0:
-        multiplier = torch.norm(torch.randn((m, d)), dim=1)
+        multiplier = torch.norm(torch.randn((m, d)), dim=1)   # 这个值不是很理解，相当于每一个向量乘上一个常量
     elif scaling == 1:
         multiplier = torch.sqrt(torch.tensor(float(d))) * torch.ones(m)
     else:
@@ -140,7 +141,7 @@ def kernelized_softmax(query, key, value, kernel_transformation, projection_matr
 
     if return_weight: # query edge prob for computing edge-level reg loss, this step requires O(E)
         start, end = edge_index
-        query_end, key_start = query_prime[end], key_prime[start] # [E, B, H, M]
+        query_end, key_start = query_prime[end], key_prime[start] # [E, B, H, M]   # 为什么要反过来？
         edge_attn_num = torch.einsum("ebhm,ebhm->ebh", query_end, key_start) # [E, B, H]
         edge_attn_num = edge_attn_num.permute(1, 0, 2) # [B, E, H]
         attn_normalizer = denominator(query_prime, key_prime) # [N, B, H]
@@ -235,6 +236,7 @@ class NodeFormerConv(nn.Module):
         self.Wv = nn.Linear(in_channels, out_channels * num_heads)
         self.Wo = nn.Linear(out_channels * num_heads, out_channels)
         if rb_order >= 1:
+            # relation_bias的参数
             self.b = torch.nn.Parameter(torch.FloatTensor(rb_order, num_heads), requires_grad=True)
 
         self.out_channels = out_channels
@@ -269,7 +271,7 @@ class NodeFormerConv(nn.Module):
             projection_matrix = None
         else:
             dim = query.shape[-1]
-            seed = torch.ceil(torch.abs(torch.sum(query) * BIG_CONSTANT)).to(torch.int32)
+            seed = torch.ceil(torch.abs(torch.sum(query) * BIG_CONSTANT)).to(torch.int32)   # 每次都不一样
             projection_matrix = create_projection_matrix(
                 self.nb_random_features, dim, seed=seed).to(query.device)
 
